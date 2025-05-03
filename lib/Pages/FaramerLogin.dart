@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 12),
 
-                Text('ගොවි මහතෙකු ලෙස', style: TextStyle(fontSize: 25)),
+                Text('මහතෙකු ලෙස', style: TextStyle(fontSize: 25)),
                 SizedBox(height: 24),
 
                 // Email Field
