@@ -1,16 +1,26 @@
 import 'package:dec_app/Pages/FaramerLogin.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart'; // ✅ Firebase Core removed — not needed here
 
 class Farmerregistration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: FarmerReg());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: FarmerReg(),
+    );
   }
 }
 
 class FarmerReg extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+
+  final FnameController = TextEditingController();
+  final LnameController = TextEditingController();
+  final PhnoController = TextEditingController();
+  final NICController = TextEditingController();
+  final EmailController = TextEditingController();
+  final PWDController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +56,7 @@ class FarmerReg extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 TextFormField(
+                  controller: FnameController,
                   decoration: InputDecoration(
                     labelText: 'මුල් නම ඇතුලත් කරන්න.',
                     border: OutlineInputBorder(),
@@ -53,6 +64,7 @@ class FarmerReg extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: LnameController,
                   decoration: InputDecoration(
                     labelText: 'වාසගම ඇතුලත් කරන්න.',
                     border: OutlineInputBorder(),
@@ -60,6 +72,7 @@ class FarmerReg extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: PhnoController,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     labelText: 'දුරකථන අංකය ඇතුලත් කරන්න.',
@@ -69,6 +82,7 @@ class FarmerReg extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: NICController,
                   decoration: InputDecoration(
                     labelText: 'ජාතික හැදුනුම්පත් අංකය ඇතුලත් කරන්න.',
                     hintText: '20012800000V',
@@ -77,6 +91,7 @@ class FarmerReg extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: EmailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'විද්‍යුත් ලිපිනය ඇතුලත් කරනන. ',
@@ -85,6 +100,7 @@ class FarmerReg extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: PWDController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'නව මුරපදයක් ඇතුලත් කරන්න.',
@@ -103,9 +119,16 @@ class FarmerReg extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Process registration
-                      }
+                      CollectionReference collRef = FirebaseFirestore.instance
+                          .collection("FamerReg");
+                      collRef.add({
+                        'Email': EmailController.text,
+                        'First Name': FnameController.text,
+                        'Last Name': LnameController.text,
+                        'NIC': NICController.text,
+                        'Password': PWDController.text,
+                        'Phone Number': PhnoController.text,
+                      });
                     },
                     child: Text(
                       'ලියාපදිංචි කරන්න',

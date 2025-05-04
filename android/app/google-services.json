@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "470631132616",
+    "project_id": "dabullatesting",
+    "storage_bucket": "dabullatesting.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470631132616:android:9b09c7a9bce96eb484a4fd",
+        "android_client_info": {
+          "package_name": "com.example.dec_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjDh-ktwCSV_c9zzmXZAKJHzSQ4xJeVKE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
