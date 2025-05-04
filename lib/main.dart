@@ -9,7 +9,7 @@ import 'Pages/homeScreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Initialize Firebase
+  // Meken Firebase Initialize karana eka Main eke witharai oni
   await Firebase.initializeApp();
 
   // ✅ Initialize Hive

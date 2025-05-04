@@ -1,6 +1,8 @@
 import 'package:dec_app/Pages/SellerLogin.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'homeScreen.dart';
 
 class SellerRegistration extends StatelessWidget {
   @override
@@ -11,6 +13,16 @@ class SellerRegistration extends StatelessWidget {
 
 class SignUpScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+
+  //Define karanawa variable tika firebase ekata danna
+
+  final FullNameController = TextEditingController();
+  final ShopNameController = TextEditingController();
+  final ShopRegNumController = TextEditingController();
+  final PhnoController = TextEditingController();
+  final NICController = TextEditingController();
+  final EmailController = TextEditingController();
+  final PWDController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +56,9 @@ class SignUpScreen extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height:5),
+                SizedBox(height: 5),
                 TextFormField(
+                  controller: FullNameController,
                   decoration: InputDecoration(
                     labelText: 'සම්පූර්ණ නම',
                     border: OutlineInputBorder(),
@@ -53,6 +66,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: ShopNameController,
                   decoration: InputDecoration(
                     labelText: 'වෙළදසැලේ නම',
                     border: OutlineInputBorder(),
@@ -60,6 +74,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: ShopRegNumController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'වෙළදසැල් ලියාපදිංචි අංකය',
@@ -68,6 +83,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: PhnoController,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     labelText: 'දුරකථන අංකය ඇතුලත් කරන්න.',
@@ -77,6 +93,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: NICController,
                   decoration: InputDecoration(
                     labelText: 'ජාතික හැදුනුම්පත් අංකය ඇතුලත් කරන්න.',
                     hintText: '20012800000V',
@@ -85,6 +102,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: EmailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'විද්‍යුත් ලිපිනය ඇතුලත් කරනන. ',
@@ -93,6 +111,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 15),
                 TextFormField(
+                  controller: PWDController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'නව මුරපදයක් ඇතුලත් කරන්න.',
@@ -110,9 +129,57 @@ class SignUpScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Process registration
+                    onPressed: () async {
+                      try {
+                        CollectionReference collRef = FirebaseFirestore.instance
+                            .collection("SellerReg");
+                        collRef.add({
+                          'Email': EmailController.text,
+                          'Full Name': FullNameController.text,
+                          'NIC': NICController.text,
+                          'PWD': PWDController.text,
+                          'Shop Name': ShopNameController.text,
+                          'Shop Reg Num': ShopRegNumController.text,
+                        });
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("සාර්ථකයි!"),
+                              content: Text("ඔබේ දත්ත සාර්ථකව යවා ඇත."),
+                              actions: [
+                                TextButton(
+                                  child: Text("හරි"),
+                                  onPressed: () {
+                                    //Closed Cutton eka
+                                    Navigator.of(context).pop();
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      '/menu',
+                                    ); //Home Page ekata redirect karanawa
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        EmailController.clear();
+                        FullNameController.clear();
+                        NICController.clear();
+                        PWDController.clear();
+                        ShopNameController.clear();
+                        ShopRegNumController.clear();
+
+                        Navigator.pushReplacement(
+                          //Redirect Karanna thiyenne page ekata
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Upload failed: $error')),
+                        );
                       }
                     },
                     child: Text(
@@ -129,7 +196,9 @@ class SignUpScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SellerloginPage()),
+                      MaterialPageRoute(
+                        builder: (context) => SellerloginPage(),
+                      ),
                     );
                   },
                   child: Text('ගිණුමක්‌ තීබේද? මෙතන ක්ලික් කරන්න.'),

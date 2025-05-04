@@ -1,14 +1,13 @@
 import 'package:dec_app/Pages/FaramerLogin.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // ✅ Firebase Core removed — not needed here
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'homeScreen.dart';
 
 class Farmerregistration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: FarmerReg(),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: FarmerReg());
   }
 }
 
@@ -118,17 +117,39 @@ class FarmerReg extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      CollectionReference collRef = FirebaseFirestore.instance
-                          .collection("FamerReg");
-                      collRef.add({
-                        'Email': EmailController.text,
-                        'First Name': FnameController.text,
-                        'Last Name': LnameController.text,
-                        'NIC': NICController.text,
-                        'Password': PWDController.text,
-                        'Phone Number': PhnoController.text,
-                      });
+                    onPressed: () async {
+                      try {
+                        CollectionReference collRef = FirebaseFirestore.instance
+                            .collection("FamerReg");
+                        await collRef.add({
+                          'Email': EmailController.text,
+                          'First Name': FnameController.text,
+                          'Last Name': LnameController.text,
+                          'NIC': NICController.text,
+                          'Password': PWDController.text,
+                          'Phone Number': PhnoController.text,
+                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Upload Successfully')),
+                        );
+
+                        FnameController.clear(); //Okkoma clear karanna
+                        LnameController.clear();
+                        PhnoController.clear();
+                        NICController.clear();
+                        EmailController.clear();
+                        PWDController.clear();
+
+                        Navigator.pushReplacement(  //Redirect Karanna thiyenne page ekata
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Upload failed: $error')),
+                        );
+                      }
                     },
                     child: Text(
                       'ලියාපදිංචි කරන්න',
